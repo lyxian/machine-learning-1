@@ -8,7 +8,8 @@ import sys
 import os
 
 FILES = ['train.html', 'train-1.html', 'train-2.html']
-DIR = 'data/'
+DIR = 'data'
+SUB_DIR = 'img'
 
 IMAGE = 'train.png'
 IMAGE_THRESHOLD = ''
@@ -83,7 +84,7 @@ for _ in range(n):
     code = input('Verify train.png , CODE=')
     payload['txtCodeNumber'] = code
 
-    subprocess.run(['cp', 'train.png', f'data/{code}.png'])
+    subprocess.run(['cp', 'train.png', f'{DIR}/{SUB_DIR}/{code}.png'])
 
     if 0:
         img = Image.open(IMAGE).convert('L').resize(map(int,IMG_SIZE*IMG_SHRINK), Image.Resampling.LANCZOS)
@@ -97,6 +98,6 @@ for _ in range(n):
                 file.write(' '.join(['O' if i > IMAGE_THRESHOLD else '-' for i in row])+'\n')
 
         # Move train.png, number.txt
-        subprocess.run(['mv', 'number.txt', f'data/{code}.txt'])
+        subprocess.run(['mv', 'number.txt', f'{DIR}/{SUB_DIR}/{code}.txt'])
         
         time.sleep(10)
