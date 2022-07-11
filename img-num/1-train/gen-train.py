@@ -83,18 +83,20 @@ for _ in range(n):
     code = input('Verify train.png , CODE=')
     payload['txtCodeNumber'] = code
 
-    img = Image.open(IMAGE).convert('L').resize(map(int,IMG_SIZE*IMG_SHRINK), Image.Resampling.LANCZOS)
-    data = numpy.array(img)
-
-    if os.path.exists('number.txt'):
-        os.remove('number.txt')
-
-    with open('number.txt', 'a') as file:
-        for row in data:
-            file.write(' '.join(['O' if i > IMAGE_THRESHOLD else '-' for i in row])+'\n')
-
-    # Move train.png, number.txt
-    subprocess.run(['mv', 'number.txt', f'data/{code}.txt'])
     subprocess.run(['cp', 'train.png', f'data/{code}.png'])
-    
-    time.sleep(10)
+
+    if 0:
+        img = Image.open(IMAGE).convert('L').resize(map(int,IMG_SIZE*IMG_SHRINK), Image.Resampling.LANCZOS)
+        data = numpy.array(img)
+
+        if os.path.exists('number.txt'):
+            os.remove('number.txt')
+
+        with open('number.txt', 'a') as file:
+            for row in data:
+                file.write(' '.join(['O' if i > IMAGE_THRESHOLD else '-' for i in row])+'\n')
+
+        # Move train.png, number.txt
+        subprocess.run(['mv', 'number.txt', f'data/{code}.txt'])
+        
+        time.sleep(10)
