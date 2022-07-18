@@ -6,6 +6,15 @@
 
 - aims to read numbers from text
 
-##Packages (list required packages & run .scripts/python-pip.sh)
+Features
 
+- localization using erosion (to expand black areas)
+- visualize coordinates of boxes
+- form number
+
+##Packages (list required packages & run .scripts/python-pip.sh)
+opencv-python
+requests
+pillow
+bs4
 ##Packages
