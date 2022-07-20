@@ -10,6 +10,8 @@ Features
 
 - localization using erosion (to expand black areas)
 - visualize coordinates of boxes
+  - standardize rectangle
+- digit recognition
 - form number
 
 ##Packages (list required packages & run .scripts/python-pip.sh)
