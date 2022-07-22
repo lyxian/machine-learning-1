@@ -19,4 +19,6 @@ opencv-python
 requests
 pillow
 bs4
+keras
+tensorflow
 ##Packages
