@@ -81,13 +81,16 @@ if 1:
     btmLeft = list(zip(x1, [y1]*3))
     topRight = list(zip(x2, [y2]*3))
 
-    for idx, (x1y1, x2y2) in enumerate(zip(btmLeft, topRight), start=1):
-        x1, y1 = x1y1; x2, y2 = x2y2
-        digit = NUMBER[idx-1]
-        cv2.imwrite(f'{SAVE_PATH}/{idx}-{digit}.png', img[y1:y2,x1:x2])
-        print(f'Saved to {SAVE_PATH}/{idx}-{digit}.png ...')
+    if len(btmLeft) == 3 and len(topRight) == 3:
+        for idx, (x1y1, x2y2) in enumerate(zip(btmLeft, topRight), start=1):
+            x1, y1 = x1y1; x2, y2 = x2y2
+            digit = NUMBER[idx-1]
+            cv2.imwrite(f'{SAVE_PATH}/{idx}-{digit}.png', img[y1:y2,x1:x2])
+            print(f'Saved to {SAVE_PATH}/{idx}-{digit}.png ...')
+        os.remove(SAVE_IMAGE)
+    else:
+        print(f'{NUMBER} not localized properly..')
+        os.remove(SAVE_IMAGE)
+        os.rmdir(SAVE_PATH)
 
-if 1:
-    os.remove(SAVE_IMAGE)
-    # os.rmdir(SAVE_PATH)
-    print(f'{SAVE_PATH} removed..')
+print(f'{SAVE_PATH} removed..')
