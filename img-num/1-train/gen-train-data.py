@@ -76,11 +76,11 @@ if MODULE == 'NEW':
     else:
         n = 1
 
-    for _ in range(n):
+    for i in range(n):
 
         headers['Cookie'] = getCookieStr(url)
         _, imageUrl, payload = getPayload()
-        code = input('Verify train.png , CODE=')
+        code = input(f'Verify train.png ({i+1}/{n}), CODE=')
         payload['txtCodeNumber'] = code
 
         subprocess.run(['cp', 'train.png', f'{DIR}/{SUB_DIR}/{code}.png'])
@@ -92,7 +92,6 @@ if MODULE == 'NEW':
 from PIL import Image
 import subprocess
 import numpy
-import time
 import sys
 import re
 import os
@@ -102,14 +101,13 @@ SUB_DIR = 'img'
 FILES = [f'{DIR}/{SUB_DIR}/{_}' for _ in os.listdir(f'{DIR}/{SUB_DIR}') if '.png' in _]
 
 SAVE_TYPE = 'png'
-
 IMAGE_THRESHOLD = 210
 IMG_SIZE = numpy.array([145,70])
 
 if MODULE == 'PROCESS':
     # Create folder
     if os.path.exists(f'{DIR}/{SAVE_TYPE}'):
-        subprocess.run(f'rm -r {DIR}/{SAVE_TYPE}')
+        subprocess.run(['rm', '-r', f'{DIR}/{SAVE_TYPE}'])
     os.mkdir(f'{DIR}/{SAVE_TYPE}')
 
     for file in FILES:
@@ -135,17 +133,20 @@ import numpy as np
 import cv2
 import os
 
-n = 10
+n = 50
 
 EXPAND = 4
 KERNEL_SIZE = (4, 4)
-SAVE_AS_TXT = True
 REQUIRED_DIR = ['flagged', 'train']
 TRAIN_DIR = f'data/png'
 
 if MODULE == 'LOCALIZE':
     FILES = sample(os.listdir(TRAIN_DIR), len(os.listdir(TRAIN_DIR)))[:n]
-    # FILENAME = sample(os.listdir(TRAIN_DIR), len(os.listdir(TRAIN_DIR)))[0]
+    
+    # Create folder
+    if os.path.exists(TRAIN_DIR):
+        subprocess.run(['rm', '-r', TRAIN_DIR])
+    os.mkdir(TRAIN_DIR)
 
     for FILENAME in FILES:
         NUMBER = FILENAME.split('.')[0]
