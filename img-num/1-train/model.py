@@ -2,11 +2,11 @@
 #  ML model to read number from image  #
 ########################################
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import (
+from keras.models import Sequential
+from keras.layers import (
     BatchNormalization, SeparableConv2D, MaxPooling2D, Activation, Flatten, Dropout, Dense, Conv2D
 )
-from tensorflow.keras import backend as K
+from keras import backend as K
 
 # Get training data
 import os
@@ -18,7 +18,7 @@ for folder in os.listdir(DATA_DIR):
     if folder == '_':
         continue
     _ = [files.append(f'{DATA_DIR}/{folder}/{file}') for file in os.listdir(f'{DATA_DIR}/{folder}')]
-print(len(files), files)
+print(f'\nTRAIN DATA HAS *{len(files)}* NUMBER OF IMAGES\n')
 
 from PIL import Image
 
@@ -87,7 +87,9 @@ model.compile(loss='categorical_crossentropy',optimizer='Adam',metrics=['accurac
 
 import time
 t_1 = time.time()
-history = model.fit ( dataArray , labelArray_2 , batch_size = 8 ,  epochs = 10 , verbose = 1 )
+# history = model.fit ( dataArray , labelArray_2 , batch_size = 8 ,  epochs = 10 , verbose = 1 )
+# history = model.fit ( dataArray , labelArray_2 , batch_size = 5 ,  epochs = 15 , verbose = 1 )
+history = model.fit ( dataArray , labelArray_2 , batch_size = 3 ,  epochs = 10 , verbose = 1 )
 print(f'Time Taken: {round(time.time()-t_1,2)} s...')
 
 # Check TRAIN_DATA
@@ -106,7 +108,7 @@ if 1:
     for folder in os.listdir(TEST_DIR):
         if folder == '_':
             continue
-        _ = [files.append(f'{TEST_DIR}/{folder}/{file}') for file in os.listdir(f'{TEST_DIR}/{folder}')]
+        _ = [files.append(f'{TEST_DIR}/{folder}/{file}') for file in sorted(os.listdir(f'{TEST_DIR}/{folder}'))]
     print(len(files), files)
 
     dataArray = []

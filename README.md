@@ -14,6 +14,13 @@ Features
 - digit recognition
 - form number
 
+Workflow
+
+- download image
+- process image to B&W
+- localize numbers
+- build model & predict
+
 ##Packages (list required packages & run .scripts/python-pip.sh)
 opencv-python
 requests
@@ -21,4 +28,5 @@ pillow
 bs4
 keras
 tensorflow
+sklearn
 ##Packages
