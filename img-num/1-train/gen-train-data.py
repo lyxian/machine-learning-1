@@ -133,30 +133,31 @@ import numpy as np
 import cv2
 import os
 
-n = 50
+n = 130
 
 EXPAND = 4
 KERNEL_SIZE = (4, 4)
-REQUIRED_DIR = ['flagged', 'train']
-TRAIN_DIR = f'data/png'
+REQUIRED_DIR = ['train', 'validation'] # + ['flagged']
+TRAIN_SOURCE_DIR = f'data/png'
+TRAIN_DIR = 'train'
+TEST_DIR = 'validation'
+TEST_SIZE = 10
 
 if MODULE == 'LOCALIZE':
-    FILES = sample(os.listdir(TRAIN_DIR), len(os.listdir(TRAIN_DIR)))[:n]
+    FILES = sample(os.listdir(TRAIN_SOURCE_DIR), len(os.listdir(TRAIN_SOURCE_DIR)))[:n]
     
-    # Create folder
-    if os.path.exists(TRAIN_DIR):
-        subprocess.run(['rm', '-r', TRAIN_DIR])
-    os.mkdir(TRAIN_DIR)
+    # Create required folders
+    for TMP_DIR in REQUIRED_DIR:
+        if os.path.exists(TMP_DIR):
+            subprocess.run(['rm', '-r', TMP_DIR])
+            print(f'{TMP_DIR} removed..')
+        os.mkdir(TMP_DIR)
+        print(f'{TMP_DIR} created..')
 
     for FILENAME in FILES:
         NUMBER = FILENAME.split('.')[0]
         SAVE_PATH = f'train/{NUMBER}'
         SAVE_IMAGE = f'{SAVE_PATH}/0.png'
-
-        for TMP_DIR in REQUIRED_DIR:
-            if not os.path.exists(TMP_DIR):
-                os.mkdir(TMP_DIR)
-                print(f'{TMP_DIR} created..')
 
         if not os.path.exists(SAVE_PATH):
             os.mkdir(SAVE_PATH)
@@ -168,7 +169,7 @@ if MODULE == 'LOCALIZE':
 
         # Process Image
         if 1:
-            img = cv2.imread(f'{TRAIN_DIR}/{FILENAME}')
+            img = cv2.imread(f'{TRAIN_SOURCE_DIR}/{FILENAME}')
             tmp = img.copy()
             kernel = np.ones(KERNEL_SIZE, np.uint8)
             erosion = cv2.erode(tmp, kernel, iterations = 1)
@@ -194,6 +195,8 @@ if MODULE == 'LOCALIZE':
                 x, y, w, h = box
                 w += EXPAND; h += EXPAND
                 x -= EXPAND; y -= EXPAND
+                if x < 0 or y < 0:   # exclude NEGATIVES
+                    continue
                 x1 = x; y1 = y; x2= x+w; y2 = y+h
                 for i in d.keys():
                     d[i] += [locals()[i]]
@@ -226,3 +229,9 @@ if MODULE == 'LOCALIZE':
                 os.rmdir(SAVE_PATH)
 
         print(f'{SAVE_PATH} removed..')
+
+    # Move validation data
+    TEST_FOLDERS = sample(os.listdir(TRAIN_DIR), len(os.listdir(TRAIN_DIR)))[:TEST_SIZE]
+    for FOLDER in TEST_FOLDERS:
+        subprocess.run(['mv', f'{TRAIN_DIR}/{FOLDER}', f'{TEST_DIR}/'])
+        print(f'{FOLDER} moved to validation/ ..')
