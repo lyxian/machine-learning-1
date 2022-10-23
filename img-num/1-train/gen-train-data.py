@@ -76,14 +76,17 @@ if MODULE == 'NEW':
     else:
         n = 1
 
-    for i in range(n):
-
+    counter = 0
+    while counter != n:
         headers['Cookie'] = getCookieStr(url)
         _, imageUrl, payload = getPayload()
-        code = input(f'Verify train.png ({i+1}/{n}), CODE=')
+        code = input(f'Verify train.png ({counter+1}/{n}), CODE=')
         payload['txtCodeNumber'] = code
-
-        subprocess.run(['cp', 'train.png', f'{DIR}/{SUB_DIR}/{code}.png'])
+        if os.path.exists(f'{DIR}/{SUB_DIR}/{code}.png'):
+            print(f'Error, \'{code}\' exists, retrying..')
+        else:
+            subprocess.run(['cp', 'train.png', f'{DIR}/{SUB_DIR}/{code}.png'])
+            counter += 1
 
 
 # =====
